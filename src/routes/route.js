@@ -12,8 +12,8 @@ const router = express.Router();
 // console.log( _.chunk(months,4))
 // const arr1 =[1,3,5,7,9,11,13,15,17,19]
 router.get('/test-me', function (req, res) {
-    let getbatch=req.params.batch
-     console.log(getbatch)
+    let getbatch = req.query.batch
+    console.log(getbatch)
     res.send('My first ever bhalot!')
     // const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     //    console.log( _.chunk(months,4))
@@ -28,8 +28,84 @@ router.get('/test-me', function (req, res) {
     console.log(" calling the validator", validator3.validator3)
 
 });
+router.get('/movies', function (req, res) {
+    let movies = ["pk", "pushapa", "attack", "bala", "ddlj"];
+
+    res.send(movies)
+
+});
+
+router.get('/movies/:indexNumber', function (req, res) {
+    let arr2 = ["rang de basnasti", "the shining", "lord of the rings", "bartman begins"]
+    let id = req.params.indexNumber
+    if (id < arr2.length) {
+        res.send(arr2[id])
+    } else {
+        res.send("index not exist")
+    }
+
+});
+
+router.get('/films', function (req, res) {
+    let moviarr = [{
+        "id": 1,
+        "name": "The Shining"
+    }, {
+        "id": 2,
+        "name": "Incendies"
+    }, {
+        "id": 3,
+        "name": "Rang de Basanti"
+    }, {
+        "id": 4,
+        "name": "Finding Nemo"
+    }]
 
 
+    res.send(moviarr)
+
+});
+
+router.get('/films/:filmId', function (req, res) {
+    let moviarr = [{
+        "id": 1,
+        "name": "The Shining"
+    }, {
+        "id": 2,
+        "name": "Incendies"
+    }, {
+        "id": 3,
+        "name": "Rang de Basanti"
+    }, {
+        "id": 4,
+        "name": "Finding Nemo"
+    }]
+
+    let divid = req.params.filmId;
+
+
+    if (divid < moviarr.length) {
+        res.send(moviarr[divid])
+    } else {
+        res.send(" no movie exists with this id")
+
+    }
+
+});
+
+
+// router.get('/sum', function (req, res) {
+//     const arr3 = [1,2,3,5,6,7]
+ 
+//     const initialValue = 0;
+// const sumWithInitial = arr3.reduce(
+//   (previousValue, currentValue) => previousValue + currentValue,
+//   initialValue
+// );
+
+    res.send(sumWithInitial)
+
+});
 
 module.exports = router;
 // adding this comment for no   
