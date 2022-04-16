@@ -1,10 +1,19 @@
 const authorModel = require("../models/authorModel")
 const bookModel= require("../models/bookModel")
+const publisherModel = require("../models/publisherModel")
 
 const createBook= async function (req, res) {
     let book = req.body
-    let bookCreated = await bookModel.create(book)
-    res.send({data: bookCreated})
+const  autherfind =await authorModel.findById({_id:book.auther_id})
+const publisherfind = await publisherModel.findById({_id:book.publisher_id})
+if(autherfind){
+    if(publisherfind){
+        res.send({data:book})
+    }else res.send({msg:"publisher id is not equal"})
+}else res.send({ msg:"auther id is not same"})
+
+
+
 }
 
 const getBooksData= async function (req, res) {
@@ -13,7 +22,7 @@ const getBooksData= async function (req, res) {
 }
 
 const getBooksWithAuthorDetails = async function (req, res) {
-    let specificBook = await bookModel.find().populate('author_id')
+    let specificBook = await bookModel.find().populate('author_id',"publisher_id")
     res.send({data: specificBook})
 
 }
