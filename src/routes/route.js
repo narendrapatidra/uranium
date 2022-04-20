@@ -3,6 +3,7 @@ const router = express.Router();
 // const UserModel= require("../models/userModel.js")
 const UserController= require("../controllers/userController")
 //const BookController= require("../controllers/bookController")
+const ProductController= require("../controllers/productController")
 
 
 router.get("/test-me", function (req, res) {
@@ -10,6 +11,7 @@ router.get("/test-me", function (req, res) {
 })
 
 
+router.post("/createPeoduct", ProductController.createProduct)
 // router.post("/createUser", UserController.createUser  )
 // router.get("/getUsersData", UserController.getUsersData)
 
