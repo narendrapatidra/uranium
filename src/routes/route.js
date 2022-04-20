@@ -1,4 +1,6 @@
 const express = require('express');
+
+
 const router = express.Router();
 // const UserModel= require("../models/userModel.js")
 const UserController= require("../controllers/userController")
@@ -37,6 +39,7 @@ router.post("/createBook", BookController.createBook  )
 
 // // e.g. restricted and open-to-all API's can be handled like below now:
 // router.get('/homePage', mid1, UserController.feeds)
+router.get('/getBooksData',  BookController.getBooksData)
 // router.get('/profileDetails', mid1, UserController.profileDetails)
 // router.get('/friendList', mid1, UserController.friendList)
 // router.get('/changePassword', mid1, UserController.changePassword)
