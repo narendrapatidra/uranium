@@ -4,10 +4,10 @@ const productSchema = new mongoose.Schema( {
     name:String,
     category:String,
     price:{
-        type:String,
+        type:Number,
         require:true
     }
     // Write the schema content
 }, { timestamps: true });
 
-module.exports = mongoose.model('Produc', productSchema) //users
+module.exports = mongoose.model('Product', productSchema) //users
