@@ -92,15 +92,19 @@ if (!token) return res.send({ status: false, msg: "token must be present" });
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData,{new:true});
   res.send({ status: updatedUser, data: updatedUser });
 };
+
+
+
 const getdeleted = async function(req,res){
 const data = req.params.userId
-const getfind = await userModel.find({_id:data}).select({isDeleted:1,_id:0})
-const result = getfind[0].isDeleted
-if(result==true){
-  const isdelet = await userModel.find()
-  res.send({data:isdelet})
-}else res.send({msg:"true is not found"})
+const getfind = await userModel.findById(data)
+if(!getfind){
+  return res.send({status:"false",msg:"no such user exixts"})
 
+}
+
+const letupdateuser = await userModel.findOneAndDelete({_id:data},{isDeleted:true},{new:true})
+res.send({status:true,data:letupdateuser})
 }
 module.exports.createUser = createUser;
 module.exports.loginUser = loginUser;
