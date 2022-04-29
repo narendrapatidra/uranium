@@ -3,16 +3,16 @@ const Author = require('../models/authorModel');
 const jwt = require("jsonwebtoken");
 const validateEmail = require('email-validator');
 
-const addAuthor = async (req, res) => {
+const creatAuthor = async (req, res) => {
   try {
     let getData = req.body;
     if (Object.keys(getData).length == 0) return res.status(400).send({ status: false, msg: "Data is required to add a Author" });
-req.body.email = req.body.email.toLowerCase() 
-    if(!validateEmail.validate(req.body.email)) return res.status(400).send({ status: false, msg: "Enter a valid email" })
+    req.body.email = req.body.email.toLowerCase()
+    if (!validateEmail.validate(req.body.email)) return res.status(400).send({ status: false, msg: "Enter a valid email" })
 
     let showAuthorData = await Author.create(getData);
     res.status(201).send({ status: true, data: showAuthorData });
-  } catch(err) {
+  } catch (err) {
     res.status(500).send({ status: false, msg: err.message });
   }
 }
@@ -25,7 +25,7 @@ const loginAuthor = async function (req, res) {
     if (Object.keys(getData).length == 0) return res.status(400).send({ status: false, msg: "Data is required to add a Author" });
     let author = await Author.findOne({ email: email, password: password });
     if (!author)
-      return res.status(400).send({
+      return res.status(404).send({
         status: false,
         msg: "email or the password is not corerct",
       });
@@ -46,4 +46,4 @@ const loginAuthor = async function (req, res) {
 };
 module.exports.loginAuthor = loginAuthor
 
-module.exports.addAuthor = addAuthor;
+module.exports.creatAuthor = creatAuthor;

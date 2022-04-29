@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 const authorModel = require('../models/authorModel')
 const blogModel = require('../models/blogModel')
+
 //========================CREATE BLOGS===================================
 
 const createBlog = async (req, res) => {
@@ -37,8 +25,8 @@ const getBlogs = async (req, res) => {
 
     if (Object.keys(data).length == 0) {
       let getAllBlogs = await blogModel.find({ isDeleted: false, isPublished: true });
-
-      if (getAllBlogs.length == 0) return res.status(400).send({ status: false, msg: "No such blog exist" });
+      if (!getAllBlogs) return res.status(400).send({ status: false, msg: "No such blog exist" });
+      // if (getAllBlogs.length == 0) return res.status(400).send({ status: false, msg: "No such blog exist" });
       return res.status(200).send({ status: true, data: getAllBlogs })
     }
 
@@ -66,10 +54,10 @@ const putPublished = async function (req, res) {
       return res.status(404).send({ status: "false", data: "the blogid is not valid" })
 
     }
-    // let isDelet = person.isDeleted;
-    // if (isDelet == true) {
-    //     return res.status(400).send({ msg: false, data: "blog document has deleted" })
-    // }
+    let isDelet = person.isDeleted;
+    if (isDelet == true) {
+        return res.status(400).send({ msg: false, data: "blog document is already deleted" })
+    }
     let published = person.isPublished
     if (published == true && Object.keys(body) != 0) {
 
@@ -116,10 +104,10 @@ const deleteBlogById = async (req, res) => {
 };
 
 //=====================================DELETE BY QUERY PARAM=========================
-const deleteBlogsByParams = async (req, res) => {
+const deleteBlogsByQuery = async (req, res) => {
   try {
     let data = req.query;
-    if (Object.keys(data).length == 0) return res.send({ status: false, msg: "Error!, Details are needed to delete a blog" });
+    if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Error!, Details are needed to delete a blog" });
 
     let timeStamps = new Date();
 
@@ -129,7 +117,7 @@ const deleteBlogsByParams = async (req, res) => {
       { new: true },
     )
 
-    if (deletedBlog.modifiedCount == 0) return res.status(400).send({ status: false, msg: "No such blog exist or might have already been deleted" })
+    if (deletedBlog.modifiedCount == 0) return res.status(404).send({ status: false, msg: "No such blog exist or might have already been deleted" })
 
     res.status(200).send({ status: true, msg: "The blog has been deleted successfully" });
   } catch (err) {
@@ -137,7 +125,7 @@ const deleteBlogsByParams = async (req, res) => {
   }
 }
 module.exports.getBlogs = getBlogs
-module.exports.deleteBlogsByParams = deleteBlogsByParams
+module.exports.deleteBlogsByQuery = deleteBlogsByQuery
 module.exports.deleteBlogById = deleteBlogById
 module.exports.putPublished = putPublished
 module.exports.createBlog = createBlog
