@@ -17,11 +17,11 @@ const internSchema = new mongoose.Schema({
         validate: {
             validator: function (email) {
                 return emailValidator.validate(email)
-            }, message: "Enter valid email id", isAsync: false
+            }, message: "Enter valid email id"
         }
     },
     mobile: {
-        type: Number,
+        type: String,
         required: "Mobile number is required",
         unique: true,
         trim: true,
@@ -29,18 +29,12 @@ const internSchema = new mongoose.Schema({
             validator: function (number) {
                 let x = number.toString()
                 return ((x[0] == 9 || x[0] == 8 || x[0] == 7 || x[0] == 6) && x.length == 10 && x !== "")
-            }, message: "Enter valid mobile number", isAsync: false
+            }, message: "Enter valid mobile number"
         }
     },
     collegeId: {
         type: ObjectId,
         trim: true,
-        validate: {
-            validator: function (CollegeId) {
-                return objectId.isValid(CollegeId)
-            }, message: "Enter valid collegeId", isAsync: false
-
-        },
         ref: "College"
     },
     isDeleted: {

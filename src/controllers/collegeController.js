@@ -8,7 +8,7 @@ const createCollege = async function (req, res) {
         let body = req.body;
 
         if (Object.keys(body) == 0) {
-            return res.status(400).send({ status: false, msg: "data require in body" })
+            return res.status(400).send({ status: false, msg: "data is required in body" })
         }
 
         const college = await collegeModel.create(body);
