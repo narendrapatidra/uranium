@@ -1,7 +1,6 @@
 const mongoose = require("mongoose")
 const emailValidator = require("email-validator")
 const ObjectId = mongoose.Schema.Types.ObjectId
-const objectId = mongoose.Types.ObjectId
 
 const internSchema = new mongoose.Schema({
     name: {
