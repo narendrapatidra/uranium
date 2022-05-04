@@ -6,13 +6,27 @@ const internModel = require('../models/internModel');
 const createCollege = async function (req, res) {
     try {
         let body = req.body;
+        let name = body.name;
+        let fullName = body.fullName;
+        let logoLink  = body.logoLink
 
         if (Object.keys(body) == 0) {
             return res.status(400).send({ status: false, msg: "data require in body" })
         }
 
+        if(!name || name.length == 0){
+            return res.status(400).send({ status: false, msg: "Please, fill the name" }) 
+        }
+        if(!fullName ||fullName.length == 0){
+            return res.status(400).send({ status: false, msg: "Please, fill the fullName" }) 
+        }
+        if( !logoLink || logoLink.length==0){
+            return res.status(400).send({ status: false, msg: "Please, fill the logoLink" }) 
+        }
+        
+
         const college = await collegeModel.create(body);
-        res.status(201).send({ status: true, msg: " college creat successfilly", data: college })
+        res.status(201).send({ status: true, msg: " college create successfilly", data: college })
     }
     catch (err) {
         res.status(500).send({ status: false, error: err.message })
