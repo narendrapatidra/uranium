@@ -11,7 +11,7 @@ const createCollege = async function (req, res) {
         let fullName = body.fullName;
         let logoLink = body.logoLink
 
-        if (Object.keys(body) == 0)
+        if (Object.keys(body).length == 0)
             return res.status(400).send({ status: false, msg: "data is required in body" })
 
 

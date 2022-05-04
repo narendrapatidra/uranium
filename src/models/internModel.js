@@ -25,9 +25,9 @@ const internSchema = new mongoose.Schema({
         unique: true,
         trim: true,
         validate: {
-            validator: function (number) {
-                let x = number.toString()
-                return ((x[0] == 9 || x[0] == 8 || x[0] == 7 || x[0] == 6) && x.length == 10 && x !== "")
+            validator: function (mobile) {
+                let x = mobile
+                return ((x[0] == 9 || x[0] == 8 || x[0] == 7 || x[0] == 6) && x.length == 10)
             }, message: "Enter valid mobile number"
         }
     },

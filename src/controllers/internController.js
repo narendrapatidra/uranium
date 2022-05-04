@@ -27,7 +27,7 @@ const createIntern = async function (req, res) {
 
         //checks email validity
         if (!emailValidator.validate(data.email))
-            return res.status(400).send({ status: false, msg: "Enter valid email id" })
+            return res.status(400).send({ status: false, msg: "enter valid email id" })
 
         //checks if mobile is not given in body
         if (!data.mobile || data.mobile.length == 0)
@@ -37,7 +37,7 @@ const createIntern = async function (req, res) {
         function isValid(x, y) {
             if (isNaN(y))
                 return true;
-            else if ((x[0] == 9 || x[0] == 8 || x[0] == 7 || x[0] == 6) && x.length == 10 && x !== "")
+            else if ((x[0] == 9 || x[0] == 8 || x[0] == 7 || x[0] == 6) && x.length == 10 )
                 return false;
             else return true;
         }
@@ -45,6 +45,10 @@ const createIntern = async function (req, res) {
         let x = y.toString()
         if (isValid(x, y))
             return res.status(400).send({ status: false, msg: "Enter valid mobile number" })
+
+        //check unique mobile
+        if(await internModel.findOne({mobile:data.mobile}))
+        return res.status(400).send({ status: false, msg: "mobile number is already in use" })
 
         //checks if CollegeId is given in body
         if (!data.collegeId)
