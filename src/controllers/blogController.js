@@ -10,10 +10,13 @@ const createBlog = async (req, res) => {
     
 
     //checking that the below data is present or not
-    if(!data.title) return res.status(400).send({ status: false, msg: "Title of book is required" });
-    if(!data.body) return res.status(400).send({ status: false, msg: "Description of book is required" });
-    if(!data.authorid) return res.status(400).send({ status: false, msg: "Author ID is required" });
-    if(!data.category) return res.status(400).send({ status: false, msg: "Category of book is required" });
+    if(!getData.title) return res.status(400).send({ status: false, msg: "Title of book is required" });
+    if(!getData.body) return res.status(400).send({ status: false, msg: "Description of book is required" });
+    if(!getData.authorid) return res.status(400).send({ status: false, msg: "Author ID is required" });
+
+    
+    
+    if(!getData.category) return res.status(400).send({ status: false, msg: "Category of book is required" });
     
     let getAuthorData = await authorModel.findById(getData.authorid);
     console.log(getAuthorData)
@@ -33,14 +36,14 @@ const getBlogs = async (req, res) => {
 
     if (Object.keys(data).length == 0) {
       let getAllBlogs = await blogModel.find({ isDeleted: false, isPublished: true });
-      if (!getAllBlogs) return res.status(404).send({ status: false, msg: "No such blog exist" });
-      // if (getAllBlogs.length == 0) return res.status(404).send({ status: false, msg: "No such blog exist" });
+      if (!getAllBlogs) return res.status(404).send({ status: false, msg: "No such blog exist1" });
+      
       return res.status(200).send({ status: true, data: getAllBlogs })
     }
 
     let getBlogs = await blogModel.find({ $and: [{ $and: [{ isDeleted: false }, { isPublished: true }] }, { $or: [{ authorid: data.authorid }, { category: { $in: [data.category] } }, { tags: { $in: [data.tags] } }, { subcategory: { $in: [data.subcategory] } }] }] });
 
-    if (getBlogs.length == 0) return res.status(200).send({ status: true, msg: "No such blog exist" });
+    if (getBlogs.length == 0) return res.status(404).send({ status: true, msg: "No such blog exist include this authior id" });
     res.status(200).send({ status: true, data: getBlogs })
   } catch (err) {
     res.status(500).send({ status: false, error: err.message });
@@ -79,7 +82,7 @@ const putPublished = async function (req, res) {
       res.status(400).send({ msg: "already published" })
     } else if (published == false && Object.keys(body) == 0) {
       let result = await blogModel.findOneAndUpdate({ _id: blog._id }, { isPublished: true, publishedAt: Date.now() }, { new: true })
-      res.send({ data: result })
+      res.status(200).send({status:true, data: result })
     } else {
       let result = await blogModel.findOneAndUpdate({ _id: blog._id }, body, { new: true })
       res.status(200).send({ data: result })
@@ -104,7 +107,7 @@ const deleteBlogById = async (req, res) => {
     if (!blog) {
       return res.status(404).send({ status: "false", msg: "No such blog exists " })
     };
-    let blogAuthor = blog.authorId
+    let blogAuthor = blog.authorid
     let decodeAuthorid = req.authorid;
 
     if (blogAuthor != decodeAuthorid) {
@@ -115,7 +118,7 @@ const deleteBlogById = async (req, res) => {
     let data = await blogModel.findById(blogId);
     if (!data) return res.status(404).send({ status: false, msg: "No such blog found" });
 
-    if (data.isDeleted) return res.status(404).send({ status: false, msg: " Already deleted blog Or Blog not exists" });
+    if (data.isDeleted == true) return res.status(404).send({ status: false, msg: " Already deleted blog Or Blog not exists" });
 
     let timeStamps = new Date();
     await blogModel.findOneAndUpdate({ _id: blogId }, { $set: { isDeleted: true, deletedAt: timeStamps } }, { new: true })
@@ -137,7 +140,7 @@ const deleteBlogsByQuery = async (req, res) => {
     }
     let author = await authorModel.findById(authorId)
     if(!author){
-      return res.status(400).send({msg : " no such author present"})
+      return res.status(404).send({msg : " no such author present"})
     }
     let decodeAuthorid =  req.authorid;
     console.log(decodeAuthorid)
