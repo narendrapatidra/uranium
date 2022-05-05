@@ -60,25 +60,23 @@ const getColleges = async function (req, res) {
             return res.status(404).send({ status: false, msg: "College not found with given collegeName or college is deleted" })
 
         let internDetail = await internModel.find({ collegeId: collegeDetail._id }).select({ name: 1, email: 1, mobile: 1 })
-        let interns=await internModel.find({ collegeId: collegeDetail._id })
+        let interns = await internModel.find({ collegeId: collegeDetail._id })
         collegeDetail = await collegeModel.findOne({ name: data.collegeName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 })
         //when interns not found for college
-        if (internDetail.length == 0 ){
-            collegeDetail._doc["interests"] = "no interns applied for internship at this college"  
+        if (internDetail.length == 0) {
+            collegeDetail._doc["interests"] = "no interns applied for internship at this college"
             return res.status(200).send({ status: true, data: collegeDetail })
         }
 
         //when interns are deleted
-        collegeDetail._doc["interests"]=[]
-        let temp=0;
-        for(let i=0;i<2;i++){ 
-            if(!interns[i].isDeleted)
-            collegeDetail._doc["interests"][temp++] = internDetail[i]  
-        }  
-        if (collegeDetail._doc["interests"].length == 0 )
+        collegeDetail._doc["interests"] = []
+        let temp = 0;
+        for (let i = 0; i < interns.length; i++) {
+            if (!interns[i].isDeleted)
+                collegeDetail._doc["interests"][temp++] = internDetail[i]
+        }
+        if (collegeDetail._doc["interests"].length == 0)
             collegeDetail._doc["interests"] = "no interns applied for internship at this college"
-        
-        
 
         res.status(200).send({ status: true, data: collegeDetail })
     }
