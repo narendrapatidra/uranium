@@ -14,22 +14,32 @@ const createCollege = async function (req, res) {
         if (Object.keys(body).length == 0)
             return res.status(400).send({ status: false, msg: "data is required in body" })
 
+        function isPresent(value) {
+            if (!value || value.trim().length == 0)
+                return true
+        }
+        //checks if name is present or not
+        if (isPresent(name))
+            return res.status(400).send({ status: false, msg: "Please, enter the name" })
 
-        if (!name || name.length == 0)
-            return res.status(400).send({ status: false, msg: "Please, fill the name" })
-
+        //checks if name is duplicate or not
         if (await collegeModel.findOne({ name: name }))
             return res.status(400).send({ status: false, msg: "College already present with the given name" })
 
-        if (!fullName || fullName.length == 0)
-            return res.status(400).send({ status: false, msg: "Please, fill the fullName" })
+        //checks if fullName is present or not
+        if (isPresent(fullName))
+            return res.status(400).send({ status: false, msg: "Please, enter the fullName" })
 
-        if (!logoLink || logoLink.length == 0)
-            return res.status(400).send({ status: false, msg: "Please, fill the logoLink" })
-
+        //checks if logoLink is present or not
+        if (isPresent(logoLink))
+            return res.status(400).send({ status: false, msg: "Please, enter the logoLink" })
         //checks url validation
         if (!isUrlValid(logoLink))
             return res.status(400).send({ status: false, msg: "Enter valid url in logoLink" })
+
+        //vaidation for isDeleted
+        if (body.isDeleted && !(typeof body.isDeleted === Boolean) || body.isDeleted == "")
+            return res.status(400).send({ status: false, msg: "isDeleted must have Boolean value" })
 
         const college = await collegeModel.create(body);
         res.status(201).send({ status: true, msg: " college create successfilly", data: college })
