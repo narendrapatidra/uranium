@@ -37,10 +37,6 @@ const createCollege = async function (req, res) {
         if (!isUrlValid(logoLink))
             return res.status(400).send({ status: false, msg: "Enter valid url in logoLink" })
 
-        //vaidation for isDeleted
-        if (body.isDeleted && !(typeof body.isDeleted === Boolean) || body.isDeleted == "")
-            return res.status(400).send({ status: false, msg: "isDeleted must have Boolean value" })
-
         const college = await collegeModel.create(body);
         res.status(201).send({ status: true, msg: " college create successfilly", data: college })
     }
@@ -63,7 +59,7 @@ const getColleges = async function (req, res) {
         if (!data.collegeName)
             return res.status(400).send({ status: false, msg: "only collegeName is allowed in query" })
 
-        let collegeDetail = await collegeModel.findOne({ name: data.collegeName })
+        let collegeDetail = await collegeModel.findOne({ name: data.collegeName }).collation({locale:"en",strength:2})
 
         //check collegeDetails are found or not
         if (!collegeDetail || collegeDetail.isDeleted)
@@ -71,7 +67,7 @@ const getColleges = async function (req, res) {
 
         let internDetail = await internModel.find({ collegeId: collegeDetail._id }).select({ name: 1, email: 1, mobile: 1 })
         let interns = await internModel.find({ collegeId: collegeDetail._id })
-        collegeDetail = await collegeModel.findOne({ name: data.collegeName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 })
+        collegeDetail = await collegeModel.findOne({ name: data.collegeName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 }).collation({locale:"en",strength:2})
         //when interns not found for college
         if (internDetail.length == 0) {
             collegeDetail._doc["interests"] = "no interns applied for internship at this college"
