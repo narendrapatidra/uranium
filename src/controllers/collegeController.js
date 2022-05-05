@@ -59,15 +59,15 @@ const getColleges = async function (req, res) {
         if (!data.collegeName)
             return res.status(400).send({ status: false, msg: "only collegeName is allowed in query" })
 
-        let collegeDetail = await collegeModel.findOne({ name: data.collegeName })
+        let collegeDetail = await collegeModel.findOne({ name: data.collegeName }).collation({locale:"en",strength:2})
 
         //check collegeDetails are found or not
         if (!collegeDetail || collegeDetail.isDeleted)
             return res.status(404).send({ status: false, msg: "College not found with given collegeName or college is deleted" })
 
-        let internDetail = await internModel.find({ collegeId: collegeDetail._id }).select({ name: 1, email: 1, mobile: 1 }).collation({locale:"en",strength:2})
+        let internDetail = await internModel.find({ collegeId: collegeDetail._id }).select({ name: 1, email: 1, mobile: 1 })
         let interns = await internModel.find({ collegeId: collegeDetail._id })
-        collegeDetail = await collegeModel.findOne({ name: data.collegeName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 })
+        collegeDetail = await collegeModel.findOne({ name: data.collegeName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 }).collation({locale:"en",strength:2})
         //when interns not found for college
         if (internDetail.length == 0) {
             collegeDetail._doc["interests"] = "no interns applied for internship at this college"
