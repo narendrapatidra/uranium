@@ -1,4 +1,4 @@
-const { find } = require('../models/collegeModel');
+
 const collegeModel = require('../models/collegeModel');
 const internModel = require('../models/internModel');
 const isUrlValid = require('url-validation');
