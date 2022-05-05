@@ -63,10 +63,6 @@ const createIntern = async function (req, res) {
         if (!objectId.isValid(data.collegeId))
             return res.status(400).send({ status: false, msg: "Enter valid collegeId" })
 
-        //vaidation for isDeleted
-        if (data.isDeleted && !(typeof data.isDeleted === Boolean) || data.isDeleted == "")
-            return res.status(400).send({ status: false, msg: "isDeleted must have Boolean value" })
-
         let internData = await internModel.create(data)
         res.status(200).send({ status: true, data: internData })
 
