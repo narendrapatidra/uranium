@@ -2,6 +2,7 @@ const internModel = require("../models/internModel")
 const mongoose = require("mongoose")
 const objectId = mongoose.Types.ObjectId
 const emailValidator = require("email-validator")
+const collegeModel = require('../models/collegeModel');
 
 //2.
 const createIntern = async function (req, res) {
@@ -56,12 +57,12 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: "mobile number is already in use" })
 
         //checks if CollegeId is given in body
-        if (isPresent(data.collegeId))
-            return res.status(400).send({ status: false, msg: "collegeId is required" })
+        if (isPresent(data.collegeName))
+            return res.status(400).send({ status: false, msg: "collegeName is required" })
 
-        //checks for valid collegeId
-        if (!objectId.isValid(data.collegeId))
-            return res.status(400).send({ status: false, msg: "Enter valid collegeId" })
+        let  Name = await collegeModel.findOne({name : data.collegeName, isDeleted : false})
+        if (!Name) return res.status(400).send({status : false, msg: "college not found"})
+        data.collegeId = Name._id 
 
         let internData = await internModel.create(data)
         res.status(201).send({ status: true, data: internData })
