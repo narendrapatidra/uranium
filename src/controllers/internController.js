@@ -28,7 +28,7 @@ const createIntern = async function (req, res) {
 
         //checks if email id is already present in collection
         if (await internModel.findOne({ email: data.email }))
-            ratus(400).send({ status: false, msg: "email Id is already in use" })
+            res.status(404).send({ status: false, msg: "email Id is already in use" })
 
         //checks email validity
         if (!emailValidator.validate(data.email))
@@ -64,7 +64,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Enter valid collegeId" })
 
         let internData = await internModel.create(data)
-        res.status(200).send({ status: true, data: internData })
+        res.status(201).send({ status: true, data: internData })
 
     }
     catch (error) {
