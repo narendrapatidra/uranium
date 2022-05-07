@@ -6,12 +6,15 @@ const collegeModel = require('../models/collegeModel');
 
 //2.
 const createIntern = async function (req, res) {
+
+    
+
     try {
         let data = req.body;
         let keys = Object.keys(data)
 
         function isPresent(value) {
-            if (!value || value.trim().length == 0)
+            if (!value || value.trim().length==0)
                 return true
         }
 
