@@ -5,7 +5,7 @@ const collegeModel = require('../models/collegeModel');
 //2.
 const createIntern = async function (req, res) {
 
-    
+
 
     try {
         let data = req.body;
@@ -13,7 +13,7 @@ const createIntern = async function (req, res) {
         let getMobile = await internModel.findOne({ mobile: data.mobile })
 
         function isPresent(value) {
-            if (!value || value.trim().length==0)
+            if (!value || value.trim().length == 0)
                 return true
         }
 
@@ -74,7 +74,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: err })
         }
 
-        let Name = await collegeModel.findOne({ name: data.collegeName, isDeleted: false })
+        let Name = await collegeModel.findOne({ _id: data.collegeName, isDeleted: false })
         if (!Name)
             return res.status(404).send({ status: false, msg: "college not found" })
         data.collegeId = Name._id
